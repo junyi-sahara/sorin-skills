@@ -1,90 +1,126 @@
-# `sahara-intention-level-skill` Skill
+# Sorin Skill
 
-This guidance helps you use `sahara-intention-level-skill` to map crypto-related user intent to the correct DeFi AI Services Gateway endpoint and return clear, structured outputs. It is designed for questions about assets, chains, protocols, and liquidity pools.
+Run your agent with Sorin.
+
+`sorin-skill` helps an agent answer DeFi questions about tokens, pools, chains, protocols, and projects using Sahara's DeFi AI Services Gateway. It detects user intent, calls the most relevant endpoint, and returns concise, data-backed analysis.
 
 ## Quick Start
 
-1. **Get an API Key**
+1. **Get a Sorin API key**
 
-   Follow this flow to create a long-lived user API key.
+   The easiest path is the Sorin setup page:
 
-   **Environment**
+   `https://tools.saharaai.com/sorin-skills/`
 
-   - Authentication: `https://dev-authentication.saharaa.info`
-   - DeFi Proxy: `https://defi-tools-proxy.saharaa.info`
+   If you prefer to create a key manually, use the API flow in [Advanced Setup](#advanced-setup).
 
-   **Step 1: Login and get a JWT token**
-
-   **Option A: Wallet signature login**
+2. **Install the skill**
 
    ```bash
-   # 1) Generate a signing message
-   curl -X POST 'https://dev-authentication.saharaa.info/v1/auth/generate-message' \\
-     -H 'Content-Type: application/json' \\
-     -d '{"walletAddress": "0xYOUR_WALLET_ADDRESS"}'
-
-   # 2) Sign the message with your wallet, then login
-   curl -X POST 'https://dev-authentication.saharaa.info/v1/auth/login' \\
-     -H 'Content-Type: application/json' \\
-     -d '{
-       "walletAddress": "0xYOUR_WALLET_ADDRESS",
-       "signature": "0xYOUR_SIGNATURE",
-       "message": "Sign this message to authenticate: ..."
-     }'
+   npx skill add https://github.com/SaharaLabsAI/skills/tree/main/sorin-skill
    ```
 
-   **Option B: Email login**
+3. **Expose your API key to the runtime**
+
+   Add `DEFI_TOOLS_API_KEY` to the environment used by your agent runtime.
 
    ```bash
-   curl -X POST 'https://dev-authentication.saharaa.info/v1/auth/email-login' \\
-     -H 'Content-Type: application/json' \\
-     -d '{
-       "email": "your@email.com",
-       "password": "your_password",
-       "captcha": "captcha_token",
-       "role": 1
-     }'
+   # zsh (macOS default)
+   echo 'export DEFI_TOOLS_API_KEY="your_api_key_here"' >> ~/.zshrc
+   source ~/.zshrc
    ```
-
-   Save the `token` field from the login response.
-
-   **Step 2: Create a long-lived User API Key**
 
    ```bash
-   # Replace YOUR_JWT_TOKEN with the token from Step 1
-   curl -X POST 'https://dev-authentication.saharaa.info/v1/user/api-keys' \\
-     -H 'Content-Type: application/json' \\
-     -H 'Authorization: Bearer YOUR_JWT_TOKEN' \\
-     -d '{
-       "name": "my-defi-api-key",
-       "scopes": "all"
-     }'
+   # bash
+   echo 'export DEFI_TOOLS_API_KEY="your_api_key_here"' >> ~/.bashrc
+   source ~/.bashrc
    ```
 
-   The response includes `data.apiKey` (for example: `sak_live_...`). This is your long-lived key.
+4. **Restart your agent service**
 
-   > **Important:** Save `apiKey` immediately. It is shown only once.
+   Restart the runtime so it picks up the new environment variable.
 
-## Installation Guide
+## OpenClaw Setup
 
-To install this skill package, place the entire `sahara-intention-level-skill` directory under `~/.openclaw/skills`. After copying the package, it is recommended to restart the OpenClaw Gateway service. Once restarted, you should be able to see and manage this skill within the OpenClaw skill dashboard.
+If you manage environment variables through OpenClaw instead of your shell:
 
-## OpenClaw Environment Variable Setup Guide
-
-To use the `sahara-intention-level-skill` skill in OpenClaw, you must correctly add the `DEFI_TOOLS_API_KEY` environment variable.
-
-**Step-by-step:**
-
-1. Open the **Config** page from the left sidebar in OpenClaw.
+1. Open **Config** from the left sidebar.
 2. Switch to the `Environment` tab.
-3. Click `Add entry` and enter `DEFI_TOOLS_API_KEY` as the name and paste your API key as the value.
-4. Save and **restart the OpenClaw service**.
+3. Add `DEFI_TOOLS_API_KEY` with your Sorin API key as the value.
+4. Save and restart the service.
 
-## Usage and Examples
+## What This Skill Covers
 
-Ask natural-language questions about DeFi, and the skill will route the request to the correct API endpoint based on user intent.
+- Token analysis: fundamentals, price structure, holders, and market context
+- Pool analysis: yield discovery, staking opportunities, and pool comparison
+- Chain analysis: DEX volume trends, TVL changes, and protocol dominance
+- Protocol analysis: TVL, fees, revenue, and capital flow
+- Project analysis: market outlook, valuation narrative, and sentiment
 
-Example prompts:
+## Example Prompts
+
 - "Analyze this token's current risk and opportunity profile."
 - "Compare the yield and risk of these two pools."
 - "What are the key metrics for this protocol on Arbitrum?"
+- "Which ETH staking pools look strongest right now?"
+- "How has Ethereum DEX activity changed recently?"
+
+## Advanced Setup
+
+Use this section if you want to generate a long-lived API key manually.
+
+**Environment**
+
+- Authentication: `https://dev-authentication.saharaa.info`
+- DeFi Proxy: `https://defi-tools-proxy.saharaa.info`
+
+### Option A: Wallet Login
+
+```bash
+# 1) Generate a signing message
+curl -X POST 'https://dev-authentication.saharaa.info/v1/auth/generate-message' \
+  -H 'Content-Type: application/json' \
+  -d '{"walletAddress": "0xYOUR_WALLET_ADDRESS"}'
+
+# 2) Sign the message with your wallet, then login
+curl -X POST 'https://dev-authentication.saharaa.info/v1/auth/login' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "walletAddress": "0xYOUR_WALLET_ADDRESS",
+    "signature": "0xYOUR_SIGNATURE",
+    "message": "Sign this message to authenticate: ..."
+  }'
+```
+
+### Option B: Email Login
+
+```bash
+curl -X POST 'https://dev-authentication.saharaa.info/v1/auth/email-login' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "email": "your@email.com",
+    "password": "your_password",
+    "captcha": "captcha_token",
+    "role": 1
+  }'
+```
+
+Save the `token` field from the login response, then create an API key:
+
+```bash
+curl -X POST 'https://dev-authentication.saharaa.info/v1/user/api-keys' \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer YOUR_JWT_TOKEN' \
+  -d '{
+    "name": "Sorin API Key",
+    "scopes": "all"
+  }'
+```
+
+The response includes `data.apiKey` (for example, `sak_live_...`). Save it immediately. It is only shown once.
+
+## Troubleshooting
+
+- `401` or auth errors: confirm `DEFI_TOOLS_API_KEY` is set in the same environment as the runtime.
+- The skill does not pick up the key: restart the agent service after adding the environment variable.
+- You lost the API key value: generate a new one, since the original is only shown once.

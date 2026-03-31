@@ -1,9 +1,9 @@
 ---
-name: sahara-intention-level-skills
-description: Routes crypto-related user intents to the correct DeFi AI Services Gateway API and returns structured analysis with clear assumptions and risks. Use when user asks token, pool, chain, protocol, or project questions.
+name: sorin-skill
+description: Use when the user asks crypto-related questions about a token, pool, chain, protocol, or project and the agent should answer with Sorin's DeFi gateway using clear, data-backed analysis.
 ---
 
-# Intention level skills
+# Sorin Skill
 
 ## Purpose
 
@@ -61,7 +61,7 @@ curl -X 'GET' \
 
 ### 2) Yield/staking pool discovery and scoring
 
-- API: `pool`
+- API: `poolTool`
 - Use when: user asks where to stake, best APY pools, pool comparison, TVL/APY trends.
 - Input (all optional filters):
   - `chain` (optional): chain id string, e.g. `1`, `56`
