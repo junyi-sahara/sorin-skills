@@ -12,8 +12,6 @@ Run your agent with Sorin.
 
    [https://tools.saharaai.com/sorin-skills/](https://tools.saharaai.com/sorin-skills/)
 
-   If you prefer to create a key manually, use the API flow in [Advanced Setup](#advanced-setup).
-
 2. **Install the skill**
 
    ```bash
@@ -64,60 +62,6 @@ If you manage environment variables through OpenClaw instead of your shell:
 - "What are the key metrics for this protocol on Arbitrum?"
 - "Which ETH staking pools look strongest right now?"
 - "How has Ethereum DEX activity changed recently?"
-
-## Advanced Setup
-
-Use this section if you want to generate a long-lived API key manually.
-
-**Environment**
-
-- Authentication: `https://dev-authentication.saharaa.info`
-- DeFi Proxy: `https://defi-tools-proxy.saharaa.info`
-
-### Option A: Wallet Login
-
-```bash
-# 1) Generate a signing message
-curl -X POST 'https://dev-authentication.saharaa.info/v1/auth/generate-message' \
-  -H 'Content-Type: application/json' \
-  -d '{"walletAddress": "0xYOUR_WALLET_ADDRESS"}'
-
-# 2) Sign the message with your wallet, then login
-curl -X POST 'https://dev-authentication.saharaa.info/v1/auth/login' \
-  -H 'Content-Type: application/json' \
-  -d '{
-    "walletAddress": "0xYOUR_WALLET_ADDRESS",
-    "signature": "0xYOUR_SIGNATURE",
-    "message": "Sign this message to authenticate: ..."
-  }'
-```
-
-### Option B: Email Login
-
-```bash
-curl -X POST 'https://dev-authentication.saharaa.info/v1/auth/email-login' \
-  -H 'Content-Type: application/json' \
-  -d '{
-    "email": "your@email.com",
-    "password": "your_password",
-    "captcha": "captcha_token",
-    "role": 1
-  }'
-```
-
-Save the `token` field from the login response, then create an API key:
-
-```bash
-curl -X POST 'https://dev-authentication.saharaa.info/v1/user/api-keys' \
-  -H 'Content-Type: application/json' \
-  -H 'Authorization: Bearer YOUR_JWT_TOKEN' \
-  -d '{
-    "name": "Sorin API Key",
-    "scopes": "all"
-  }'
-```
-
-The response includes `data.apiKey` (for example, `sak_live_...`). Save it immediately. It is only shown once.
 
 ## Troubleshooting
 
