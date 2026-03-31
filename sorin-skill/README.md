@@ -10,7 +10,7 @@ Run your agent with Sorin.
 
    The easiest path is the Sorin setup page:
 
-   `https://tools.saharaai.com/sorin-skills/`
+   [https://tools.saharaai.com/sorin-skills/](https://tools.saharaai.com/sorin-skills/)
 
    If you prefer to create a key manually, use the API flow in [Advanced Setup](#advanced-setup).
 
@@ -38,7 +38,7 @@ Run your agent with Sorin.
 
 4. **Restart your agent service**
 
-   Restart the runtime so it picks up the new environment variable.
+   To make sure your agent picks up the new skill & environment variable.
 
 ## OpenClaw Setup
 
